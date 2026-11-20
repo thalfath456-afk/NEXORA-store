@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXORA | طلب شحن</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial,sans-serif}
+header{padding:28px 18px;text-align:center;background:linear-gradient(135deg,#21133a,#090712);border-bottom:1px solid #46266b}
+.logo{font-size:34px;font-weight:900;letter-spacing:2px;color:#d8b5ff}
+header p{color:#c9bfd8;line-height:1.8;margin:8px 0 0}
+main{max-width:720px;margin:24px auto;padding:0 15px}
+.card{background:#191329;border:1px solid #49315f;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 10px 30px #0005}
+h2{margin-top:0;color:#d8b5ff}
+label{display:block;margin:15px 0 7px;color:#e9dfff;font-weight:bold}
+input,select{width:100%;padding:13px;border-radius:10px;border:1px solid #5a4271;background:#100b1b;color:#fff;font-size:16px}
+input:focus,select:focus{outline:2px solid #a64cff}
+button{width:100%;border:0;border-radius:12px;padding:15px;margin-top:20px;font-size:16px;font-weight:bold;background:#25a75a;color:white;cursor:pointer}
+.small{font-size:13px;color:#aaa1bc;line-height:1.8}
+.price-box{margin:14px 0 20px;padding:18px 16px;border:2px solid #a64cff;border-radius:15px;background:linear-gradient(135deg,#25143b,#130d20);text-align:center;box-shadow:0 8px 24px #0006}
+.price-caption{display:block;color:#d8b5ff;font-size:16px;font-weight:bold;margin-bottom:6px}
+#priceDisplay{font-size:27px;font-weight:900;color:#ffe08a;line-height:1.5;margin:0}
+.payment-account{padding:14px;margin:12px 0;border:1px solid #62427f;border-radius:13px;background:#191329}
+.payment-account h3{margin:0 0 8px;color:#e3c8ff;font-size:18px}
+.account-number{font-size:23px;font-weight:900;letter-spacing:1px;color:#ffe08a;direction:ltr;text-align:right;margin:8px 0}
+.account-name{font-size:16px;color:#fff;font-weight:bold;line-height:1.8}
+.copy-btn{width:auto;min-width:130px;padding:10px 15px;margin:8px 0 0;background:#7040a0;color:#fff;font-size:15px;border:1px solid #a879d2}
+.copy-status{display:inline-block;margin-right:8px;color:#9ee6b0;font-size:13px}
+
+.badge{display:inline-block;background:#28173d;color:#d8b5ff;border:1px solid #553276;padding:6px 10px;border-radius:20px;margin:3px}
+footer{text-align:center;color:#81768f;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">♛ NEXORA</div>
+  <p>متجر شحن الألعاب<br><span class="badge">PUBG Mobile</span><span class="badge">Free Fire</span></p>
+</header>
+<main>
+<section class="card">
+<h2>إنشاء طلب شحن</h2>
+<p class="small">املأ البيانات الأساسية، ثم اضغط إرسال الطلب لفتح محادثة واتساب برسالة جاهزة.</p>
+<form id="orderForm">
+<label for="game">اللعبة</label>
+<select id="game" required>
+<option value="">اختر اللعبة</option>
+<option value="PUBG Mobile">PUBG Mobile</option>
+<option value="Free Fire">Free Fire</option>
+</select>
+
+<label for="package">الباقة</label>
+<select id="package" required disabled>
+<option value="">اختر اللعبة أولاً</option>
+</select>
+<div class="price-box">
+<span class="price-caption">السعر المطلوب</span>
+<p id="priceDisplay" aria-live="polite">سيظهر هنا بعد اختيار الباقة</p>
+</div>
+
+<label for="playerId">Player ID</label>
+<input id="playerId" inputmode="numeric" autocomplete="off" placeholder="أدخل Player ID الخاص بك" required>
+
+<label for="payment">طريقة الدفع التي تفضلها</label>
+<select id="payment" required>
+<option value="">اختر طريقة الدفع</option>
+<option value="بنكك">بنكك</option>
+<option value="ماي كاشي">ماي كاشي</option>
+</select>
+
+<div class="card" style="background:#100b1b;margin-top:16px">
+<h2 style="font-size:21px">بيانات الدفع</h2>
+<div id="bankInfo" class="payment-account">
+<h3>بنكك</h3>
+<div class="account-number">5350659</div>
+<div class="account-name">اسم صاحب الحساب: نصر الدين محمد يحيى</div>
+<button type="button" class="copy-btn" data-copy="5350659">نسخ رقم بنكك</button>
+<span class="copy-status" id="bankCopyStatus" aria-live="polite"></span>
+</div>
+<div id="mycashInfo" class="payment-account">
+<h3>ماي كاشي</h3>
+<div class="account-number">400526832</div>
+<div class="account-name">اسم صاحب الحساب: الفاتح طه ابراهيم</div>
+<button type="button" class="copy-btn" data-copy="400526832">نسخ رقم ماي كاشي</button>
+<span class="copy-status" id="mycashCopyStatus" aria-live="polite"></span>
+</div>
+<p class="small">تأكد من اختيار طريقة الدفع الصحيحة ومطابقة اسم المستفيد قبل التحويل. لا ترسل كلمة مرور أو رمز تحقق.</p>
+</div>
+
+<label for="receipt">إرفاق إيصال الدفع أو إشعار التحويل (صورة)</label>
+<input id="receipt" type="file" accept="image/*">
+<p class="small">بعد فتح واتساب، أرفق صورة الإيصال يدوياً في المحادثة؛ اختيار الملف هنا لا يرفعه تلقائياً.</p>
+
+<button type="submit">إرسال الطلب عبر واتساب</button>
+</form>
+<p class="small">لن نطلب منك إدخال كلمة مرور أو رمز تحقق أو بيانات دخول. لا تحوّل أي مبلغ قبل تأكيد السعر وتفاصيل الطلب مع المتجر.</p>
+</section>
+
+<section class="card">
+<h2>معلومات مهمة</h2>
+<p class="small">هذه نسخة تجريبية: زر الإرسال يفتح واتساب فقط ولا ينشئ طلباً محفوظاً في خادم، ولا يتحقق من الدفع، ولا ينفّذ الشحن تلقائياً. لا يوجد رفع أو تخزين لإيصالات الدفع في هذه النسخة.</p>
+</section>
+</main>
+<footer>© NEXORA</footer>
+
+<script>
+const packages = {
+  "PUBG Mobile": [
+    {name:"60 UC", price:10475},
+    {name:"325 UC", price:51375},
+    {name:"660 UC", price:104750},
+    {name:"1800 UC", price:262000},
+    {name:"3850 UC", price:524000},
+    {name:"8100 UC", price:1047500}
+  ],
+  "Free Fire": [
+    {name:"110 جوهرة", price:11500},
+    {name:"231 جوهرة", price:22900},
+    {name:"583 جوهرة", price:57900},
+    {name:"1188 جوهرة", price:115800},
+    {name:"2420 جوهرة", price:234400},
+    {name:"العضوية الأسبوعية", price:null},
+    {name:"العضوية الشهرية", price:null}
+  ]
+};
+const game = document.getElementById("game");
+const pack = document.getElementById("package");
+const priceDisplay = document.getElementById("priceDisplay");
+game.addEventListener("change", () => {
+  pack.innerHTML = '<option value="">اختر الباقة</option>';
+  const list = packages[game.value] || [];
+  list.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item.name;
+    option.textContent = item.name;
+    if (item.price !== null) option.dataset.price = item.price;
+    pack.appendChild(option);
+  });
+  pack.disabled = list.length === 0;
+  priceDisplay.textContent = "اختر الباقة لمعرفة السعر.";
+});
+pack.addEventListener("change", () => {
+  const selected = pack.options[pack.selectedIndex];
+  const price = selected && selected.dataset.price;
+  priceDisplay.textContent = price
+    ? Number(price).toLocaleString("en-US") + " ج.س"
+    : "غير محدد";
+});
+document.querySelectorAll(".copy-btn").forEach(button => {
+  button.addEventListener("click", async () => {
+    const number = button.dataset.copy;
+    const statusId = number === "5350659" ? "bankCopyStatus" : "mycashCopyStatus";
+    const status = document.getElementById(statusId);
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(number);
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = number;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        const copied = document.execCommand("copy");
+        temp.remove();
+        if (!copied) throw new Error("copy failed");
+      }
+      status.textContent = "تم النسخ";
+    } catch (error) {
+      status.textContent = "تعذر النسخ؛ اضغط مطولاً على الرقم لنسخه";
+    }
+    setTimeout(() => { status.textContent = ""; }, 2500);
+  });
+});
+
+document.getElementById("orderForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const playerId = document.getElementById("playerId").value.trim();
+  if (!/^[0-9]{5,20}$/.test(playerId)) {
+    alert("يرجى إدخال Player ID صحيح يتكون من أرقام فقط.");
+    return;
+  }
+  const paymentMethod = document.getElementById("payment").value;
+  const receiptFile = document.getElementById("receipt").files[0];
+  const paymentDetails = paymentMethod === "بنكك"
+    ? "رقم حساب بنكك: 5350659 — باسم نصر الدين محمد يحيى"
+    : "رقم حساب ماي كاشي: 400526832 — باسم الفاتح طه ابراهيم";
+  const message = [
+    "مرحباً، أريد طلب شحن من متجر NEXORA.",
+    "اللعبة: " + game.value,
+    "الباقة: " + pack.value,
+    "السعر المعروض: " + (pack.options[pack.selectedIndex].dataset.price
+      ? Number(pack.options[pack.selectedIndex].dataset.price).toLocaleString("en-US") + " SDG"
+      : "يرجى تأكيد السعر"),
+    "Player ID: " + playerId,
+    "طريقة الدفع: " + paymentMethod,
+    paymentDetails,
+    "إيصال الدفع: " + (receiptFile ? "سأرفق صورة الإيصال يدوياً في هذه المحادثة." : "لم أحدد صورة بعد؛ سأرسل الإيصال في المحادثة بعد التحويل."),
+    "يرجى تأكيد استلام المبلغ قبل تنفيذ الشحن."
+  ].join("\n");
+  window.open("https://wa.me/249127774842?text=" + encodeURIComponent(message), "_blank", "noopener");
+});
+</script>
+</body>
+</html>

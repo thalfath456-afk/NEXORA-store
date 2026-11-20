@@ -1,0 +1,24 @@
+<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NEXORA SDG</title>
+<style>
+body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:18px}h1{color:#d8b5ff}.muted{color:#aaa1bc;line-height:1.8}.card{background:#191329;border:1px solid #49315f;border-radius:14px;padding:14px;margin:12px 0;overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px}td,th{padding:12px;border-bottom:1px solid #49315f;text-align:right}input{background:#090712;color:white;border:1px solid #49315f;border-radius:8px;padding:9px;width:105px}.green{color:#62e6ad}button{background:#673bd1;color:white;border:0;padding:11px 15px;border-radius:10px;margin:5px}
+</style>
+<h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
+<div class="card"><b>عدد المنتجات: <span id="count"></span></b><p>إجمالي تكلفة الشراء المسجلة: <b id="cost"></b></p><p>إجمالي الربح المتوقع للوحدة: <b id="profit"></b></p></div>
+<div class="card"><table><thead><tr><th>المنتج</th><th>تكلفة الشراء</th><th>سعر البيع</th><th>الربح</th><th>هامش الربح</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="card"><h3>إضافة منتج آخر</h3><input id="name" placeholder="اسم المنتج"><input id="buy" type="number" placeholder="تكلفة الشراء"><input id="sell" type="number" placeholder="سعر البيع"><button onclick="add()">إضافة</button></div>
+<button onclick="exportCSV()">تصدير CSV</button><button onclick="resetAll()">استعادة القائمة الأساسية</button>
+<p class="muted">تنبيه: هذه لوحة تجريبية تحفظ البيانات في هذا المتصفح على هذا الجهاز فقط، ولا تتصل بواجهة المتجر أو المورد أو الدفع.</p>
+<script>
+const seed=[
+['PUBG Mobile — 60 UC',9975,10475],['PUBG Mobile — 325 UC',49875,51375],['PUBG Mobile — 660 UC',99750,104750],['PUBG Mobile — 1800 UC',249375,262000],['PUBG Mobile — 3850 UC',498750,524000],['PUBG Mobile — 8100 UC',997500,1047500],
+['Free Fire — 110 جوهرة',10500,11500],['Free Fire — 231 جوهرة',17302,22900],['Free Fire — 583 جوهرة',43341,57900],['Free Fire — 1188 جوهرة',86682,115800],['Free Fire — 2420 جوهرة',173021,234400],['Free Fire — العضوية الأسبوعية',18711,18711],['Free Fire — العضوية الشهرية',92704,92704]];
+const key='nexoraPricesSDG_v9';let data=JSON.parse(localStorage.getItem(key)||'null');if(!Array.isArray(data))data=seed.map(x=>({name:x[0],cost:x[1],price:x[2]}));
+for(const x of seed)if(!data.some(p=>p.name===x[0]))data.push({name:x[0],cost:x[1],price:x[2]});
+const money=n=>Number(n||0).toLocaleString('en-US')+' SDG';
+function save(){localStorage.setItem(key,JSON.stringify(data));render()}
+function render(){let rows=document.getElementById('rows');rows.innerHTML='';let costs=0,profits=0;data.forEach((p,i)=>{let c=+p.cost||0,s=+p.price||0,pr=s-c;costs+=c;profits+=pr;let tr=document.createElement('tr');let name=document.createElement('td');name.textContent=p.name;tr.append(name);for(let k of ['cost','price']){let td=document.createElement('td'),inp=document.createElement('input');inp.type='number';inp.min='0';inp.value=p[k];inp.onchange=()=>{data[i][k]=Math.max(0,+inp.value||0);save()};td.append(inp);tr.append(td)}let a=document.createElement('td');a.className='green';a.textContent=money(pr);tr.append(a);let b=document.createElement('td');b.textContent=(s?pr/s*100:0).toFixed(1)+'%';tr.append(b);rows.append(tr)});document.getElementById('count').textContent=data.length;document.getElementById('cost').textContent=money(costs);document.getElementById('profit').textContent=money(profits)}
+function add(){let n=document.getElementById('name').value.trim(),c=+document.getElementById('buy').value,s=+document.getElementById('sell').value;if(!n||c<0||s<0){alert('أدخل البيانات بشكل صحيح');return}data.push({name:n,cost:c,price:s});save()}
+function resetAll(){if(confirm('استعادة القائمة الأساسية؟ سيتم استبدال تعديلاتك.')){data=seed.map(x=>({name:x[0],cost:x[1],price:x[2]}));save()}}
+function exportCSV(){let lines=[['Product','Cost_SDG','Sale_SDG','Profit_SDG'],...data.map(p=>[p.name,p.cost,p.price,p.price-p.cost])];let csv='\uFEFF'+lines.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='NEXORA_prices_SDG.csv';a.click()}
+save();
+</script></html>
