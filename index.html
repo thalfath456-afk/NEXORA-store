@@ -214,7 +214,7 @@ const { error } = await supabaseClient
 
 if (error) {
   console.error("Supabase error:", error);
-  alert("تعذر حفظ الطلب. يرجى المحاولة مرة أخرى.");
+  alert("سبب فشل الحفظ: " + error.message);
   return;
   }
   const message = [
