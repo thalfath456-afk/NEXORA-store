@@ -102,8 +102,15 @@ footer{text-align:center;color:#81768f;padding:20px}
 </section>
 </main>
 <footer>© NEXORA</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>const SUPABASE_URL = "https://pdolwwkzjutavvcpbivk.supabase.co";
 
-<script>
+const SUPABASE_KEY = "ضع المفتاح العام هنا";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 const packages = {
   "PUBG Mobile": [
     {name:"60 UC", price:10475},
@@ -173,7 +180,7 @@ document.querySelectorAll(".copy-btn").forEach(button => {
   });
 });
 
-document.getElementById("orderForm").addEventListener("submit", event => {
+document.getElementById("orderForm").addEventListener("submit", async event => {
   event.preventDefault();
   const playerId = document.getElementById("playerId").value.trim();
   if (!/^[0-9]{5,20}$/.test(playerId)) {
@@ -184,7 +191,32 @@ document.getElementById("orderForm").addEventListener("submit", event => {
   const receiptFile = document.getElementById("receipt").files[0];
   const paymentDetails = paymentMethod === "بنكك"
     ? "رقم حساب بنكك: 5350659 — باسم نصر الدين محمد يحيى"
-    : "رقم حساب ماي كاشي: 400526832 — باسم الفاتح طه ابراهيم";
+    : "رقم حساب ماي كاشي: 400526832 — باسم الفاتح طه ابراهيم";const amount = Number(
+  pack.options[pack.selectedIndex].dataset.price
+);
+
+if (!Number.isFinite(amount) || amount <= 0) {
+  alert("هذه الباقة غير متاحة حاليًا.");
+  return;
+}
+
+const { error } = await supabaseClient
+  .from("orders")
+  .insert({
+    player_id: playerId,
+    game: game.value,
+    package: pack.value,
+    amount: amount,
+    payment_method: paymentMethod,
+    status: "pending",
+    transaction_id: null
+  });
+
+if (error) {
+  console.error("Supabase error:", error);
+  alert("تعذر حفظ الطلب. يرجى المحاولة مرة أخرى.");
+  return;
+  }
   const message = [
     "مرحباً، أريد طلب شحن من متجر NEXORA.",
     "اللعبة: " + game.value,
