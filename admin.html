@@ -2,7 +2,31 @@
 <style>
 body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:18px}h1{color:#d8b5ff}.muted{color:#aaa1bc;line-height:1.8}.card{background:#191329;border:1px solid #49315f;border-radius:14px;padding:14px;margin:12px 0;overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px}td,th{padding:12px;border-bottom:1px solid #49315f;text-align:right}input{background:#090712;color:white;border:1px solid #49315f;border-radius:8px;padding:9px;width:105px}.green{color:#62e6ad}button{background:#673bd1;color:white;border:0;padding:11px 15px;border-radius:10px;margin:5px}
 </style>
-<h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
+<div class="card" id="loginBox">
+  <h2>تسجيل دخول المسؤول</h2>
+
+  <input
+    id="adminEmail"
+    type="email"
+    placeholder="البريد الإلكتروني"
+    style="width:90%"
+  >
+
+  <br><br>
+
+  <input
+    id="adminPassword"
+    type="password"
+    placeholder="كلمة المرور"
+    style="width:90%"
+  >
+
+  <br><br>
+
+  <button onclick="loginAdmin()">دخول</button>
+
+  <p id="loginMessage" class="muted"></p>
+</div><h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
 <div class="card"><b>عدد المنتجات: <span id="count"></span></b><p>إجمالي تكلفة الشراء المسجلة: <b id="cost"></b></p><p>إجمالي الربح المتوقع للوحدة: <b id="profit"></b></p></div>
 <div class="card"><table><thead><tr><th>المنتج</th><th>تكلفة الشراء</th><th>سعر البيع</th><th>الربح</th><th>هامش الربح</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="card"><h3>إضافة منتج آخر</h3><input id="name" placeholder="اسم المنتج"><input id="buy" type="number" placeholder="تكلفة الشراء"><input id="sell" type="number" placeholder="سعر البيع"><button onclick="add()">إضافة</button></div>
@@ -12,7 +36,7 @@ body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:
 
 <script>
 const SUPABASE_URL = "https://pdolwwkzjutavvcpbivk.supabase.co";
-const SUPABASE_KEY = "sb_publishable_W7DifaPdaURTZKPT1DSQ1Q_Lc34vASy publishable هنا";
+const SUPABASE_KEY = "sb_publishable_W7DifaPdaURTZKPT1DSQ1Q_Lc34vASy publishable ";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
