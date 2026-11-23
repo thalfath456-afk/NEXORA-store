@@ -53,5 +53,40 @@ function render(){let rows=document.getElementById('rows');rows.innerHTML='';let
 function add(){let n=document.getElementById('name').value.trim(),c=+document.getElementById('buy').value,s=+document.getElementById('sell').value;if(!n||c<0||s<0){alert('أدخل البيانات بشكل صحيح');return}data.push({name:n,cost:c,price:s});save()}
 function resetAll(){if(confirm('استعادة القائمة الأساسية؟ سيتم استبدال تعديلاتك.')){data=seed.map(x=>({name:x[0],cost:x[1],price:x[2]}));save()}}
 function exportCSV(){let lines=[['Product','Cost_SDG','Sale_SDG','Profit_SDG'],...data.map(p=>[p.name,p.cost,p.price,p.price-p.cost])];let csv='\uFEFF'+lines.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='NEXORA_prices_SDG.csv';a.click()}
-save();
+async function loginAdmin() {
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  const message = document.getElementById("loginMessage");
+
+  if (!email || !password) {
+    message.textContent = "أدخل البريد وكلمة المرور.";
+    return;
+  }
+
+  message.textContent = "جارٍ التحقق...";
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = "فشل تسجيل الدخول: " + error.message;
+    return;
+  }
+
+  const { data: admin, error: adminError } = await supabaseClient
+    .from("admins")
+    .select("user_id")
+    .eq("user_id", data.user.id)
+    .maybeSingle();
+
+  if (adminError || !admin) {
+    await supabaseClient.auth.signOut();
+    message.textContent = "هذا الحساب ليس مسؤولاً.";
+    return;
+  }
+
+  message.textContent = "تم تسجيل الدخول بنجاح.";
+  }save();
 </script></html>
