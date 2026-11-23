@@ -8,7 +8,16 @@ body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:
 <div class="card"><h3>إضافة منتج آخر</h3><input id="name" placeholder="اسم المنتج"><input id="buy" type="number" placeholder="تكلفة الشراء"><input id="sell" type="number" placeholder="سعر البيع"><button onclick="add()">إضافة</button></div>
 <button onclick="exportCSV()">تصدير CSV</button><button onclick="resetAll()">استعادة القائمة الأساسية</button>
 <p class="muted">تنبيه: هذه لوحة تجريبية تحفظ البيانات في هذا المتصفح على هذا الجهاز فقط، ولا تتصل بواجهة المتجر أو المورد أو الدفع.</p>
+<script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+const SUPABASE_URL = "https://pdolwwkzjutavvcpbivk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_W7DifaPdaURTZKPT1DSQ1Q_Lc34vASy publishable هنا";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 const seed=[
 ['PUBG Mobile — 60 UC',9975,10475],['PUBG Mobile — 325 UC',49875,51375],['PUBG Mobile — 660 UC',99750,104750],['PUBG Mobile — 1800 UC',249375,262000],['PUBG Mobile — 3850 UC',498750,524000],['PUBG Mobile — 8100 UC',997500,1047500],
 ['Free Fire — 110 جوهرة',10500,11500],['Free Fire — 231 جوهرة',17302,22900],['Free Fire — 583 جوهرة',43341,57900],['Free Fire — 1188 جوهرة',86682,115800],['Free Fire — 2420 جوهرة',173021,234400],['Free Fire — العضوية الأسبوعية',18711,18711],['Free Fire — العضوية الشهرية',92704,92704]];
