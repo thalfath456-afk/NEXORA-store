@@ -26,11 +26,12 @@ body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:
   <button onclick="loginAdmin()">دخول</button>
 
   <p id="loginMessage" class="muted"></p>
-</div><h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
+<div id="adminPanel" style="display:none"></div><h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
 <div class="card"><b>عدد المنتجات: <span id="count"></span></b><p>إجمالي تكلفة الشراء المسجلة: <b id="cost"></b></p><p>إجمالي الربح المتوقع للوحدة: <b id="profit"></b></p></div>
 <div class="card"><table><thead><tr><th>المنتج</th><th>تكلفة الشراء</th><th>سعر البيع</th><th>الربح</th><th>هامش الربح</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="card"><h3>إضافة منتج آخر</h3><input id="name" placeholder="اسم المنتج"><input id="buy" type="number" placeholder="تكلفة الشراء"><input id="sell" type="number" placeholder="سعر البيع"><button onclick="add()">إضافة</button></div>
-<button onclick="exportCSV()">تصدير CSV</button><button onclick="resetAll()">استعادة القائمة الأساسية</button>
+<button onclick="exportCSV()">تصدير CSV</button><button onclick="resetAll()">استعادة القائمة الأساسية</button><button onclick="logoutAdmin()">تسجيل الخروج</button>
+</div>
 <p class="muted">تنبيه: هذه لوحة تجريبية تحفظ البيانات في هذا المتصفح على هذا الجهاز فقط، ولا تتصل بواجهة المتجر أو المورد أو الدفع.</p>
 <script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -88,5 +89,12 @@ async function loginAdmin() {
   }
 
   message.textContent = "تم تسجيل الدخول بنجاح.";
-  }save();
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("adminPanel").style.display = "block";
+  }async function logoutAdmin() {
+  await supabaseClient.auth.signOut();
+  document.getElementById("adminPanel").style.display = "none";
+  document.getElementById("loginBox").style.display = "block";
+                                                               }save();
 </script></html>
