@@ -115,13 +115,54 @@ async function loginAdmin() {
     await supabaseClient.auth.signOut();
     message.textContent = "هذا الحساب ليس مسؤولاً.";
     return;
+  }async function loginAdmin() {
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  const message = document.getElementById("loginMessage");
+
+  if (!email || !password) {
+    message.textContent = "أدخل البريد وكلمة المرور.";
+    return;
   }
 
-  message.textContent = "تم تسجيل الدخول بنجاح.";
+  try {
+    message.textContent = "جارٍ الاتصال بـ Supabase...";
 
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("adminPanel").style.display = "block";loadOrders();
-  }async function logoutAdmin() {
+    const result = await Promise.race([
+      supabaseClient.auth.signInWithPassword({ email, password }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("انتهت مهلة الاتصال")), 15000)
+      )
+    ]);
+
+    if (result.error) throw result.error;
+
+    message.textContent = "تم الدخول، جارٍ التحقق من صلاحية المسؤول...";
+
+    const check = await supabaseClient
+      .from("admins")
+      .select("user_id")
+      .eq("user_id", result.data.user.id)
+      .maybeSingle();
+
+    if (check.error) throw check.error;
+
+    if (!check.data) {
+      await supabaseClient.auth.signOut();
+      throw new Error("هذا الحساب ليس مسؤولاً.");
+    }
+
+    message.textContent = "تم تسجيل الدخول بنجاح.";
+
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+
+    loadOrders();
+
+  } catch (error) {
+    message.textContent = "خطأ: " + error.message;
+  }
+  }
   await supabaseClient.auth.signOut();
   document.getElementById("adminPanel").style.display = "none";
   document.getElementById("loginBox").style.display = "block";
