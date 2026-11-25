@@ -116,10 +116,101 @@ async function loginAdmin() {
   message.textContent = "تم تسجيل الدخول بنجاح.";
 
 document.getElementById("loginBox").style.display = "none";
-document.getElementById("adminPanel").style.display = "block";
+document.getElementById("adminPanel").style.display = "block";loadOrders();
   }async function logoutAdmin() {
   await supabaseClient.auth.signOut();
   document.getElementById("adminPanel").style.display = "none";
   document.getElementById("loginBox").style.display = "block";
-                                                               }save();
+                                                               }async function loadOrders() {
+  const rows = document.getElementById("ordersRows");
+  const message = document.getElementById("ordersMessage");
+
+  rows.innerHTML = "";
+  message.textContent = "جارٍ تحميل الطلبات...";
+
+  const { data, error } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    message.textContent = "حدث خطأ: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = "لا توجد طلبات حتى الآن.";
+    return;
+  }
+
+  data.forEach(order => {
+    const tr = document.createElement("tr");
+
+    const values = [
+      order.id,
+      order.game,
+      order.package,
+      order.player_id,
+      Number(order.amount).toLocaleString("en-US") + " SDG",
+      order.payment_method
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value ?? "-";
+      tr.appendChild(td);
+    });
+
+    const statusCell = document.createElement("td");
+    const statusSelect = document.createElement("select");
+
+    const statuses = [
+      ["pending", "قيد الانتظار"],
+      ["paid", "تم التحقق من الدفع"],
+      ["completed", "مكتمل"],
+      ["rejected", "مرفوض"]
+    ];
+
+    statuses.forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      statusSelect.appendChild(option);
+    });
+
+    statusSelect.value = order.status;
+    statusCell.appendChild(statusSelect);
+    tr.appendChild(statusCell);
+
+    const actionCell = document.createElement("td");
+    const button = document.createElement("button");
+
+    button.textContent = "حفظ";
+    button.onclick = () =>
+      updateOrderStatus(order.id, statusSelect.value);
+
+    actionCell.appendChild(button);
+    tr.appendChild(actionCell);
+
+    rows.appendChild(tr);
+  });
+
+  message.textContent = "عدد الطلبات: " + data.length;
+}
+
+
+async function updateOrderStatus(id, status) {
+  const { error } = await supabaseClient
+    .from("orders")
+    .update({ status: status })
+    .eq("id", id);
+
+  if (error) {
+    alert("فشل تحديث الحالة: " + error.message);
+    return;
+  }
+
+  alert("تم تحديث حالة الطلب بنجاح.");
+  loadOrders();
+      }save();
 </script></html>
