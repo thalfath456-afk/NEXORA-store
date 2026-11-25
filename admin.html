@@ -25,8 +25,12 @@ body{margin:0;background:#090712;color:#f7f3ff;font-family:Tahoma,Arial;padding:
 
   <button onclick="loginAdmin()">دخول</button>
 
-  <p id="loginMessage" class="muted"></p>
-<div id="adminPanel" style="display:none"></div><h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
+<p id="loginMessage" class="muted"></p>
+</div>
+
+<div id="adminPanel" style="display:none">
+
+<h1>NEXORA — إدارة الأسعار والأرباح</h1><p class="muted">العملة: الجنيه السوداني SDG. أسعار Free Fire المعتمدة مبدئياً حسب قائمتك. أسعار PUBG وFree Fire المعتمدة مبدئياً حسب قائمتك.</p>
 <div class="card"><b>عدد المنتجات: <span id="count"></span></b><p>إجمالي تكلفة الشراء المسجلة: <b id="cost"></b></p><p>إجمالي الربح المتوقع للوحدة: <b id="profit"></b></p></div>
 <div class="card"><table><thead><tr><th>المنتج</th><th>تكلفة الشراء</th><th>سعر البيع</th><th>الربح</th><th>هامش الربح</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="card"><h3>إضافة منتج آخر</h3><input id="name" placeholder="اسم المنتج"><input id="buy" type="number" placeholder="تكلفة الشراء"><input id="sell" type="number" placeholder="سعر البيع"><button onclick="add()">إضافة</button></div>
